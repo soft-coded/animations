@@ -1,5 +1,8 @@
 const menuContainer = document.createElement("div");
 menuContainer.classList.add("menu-container");
+const menuWidth = 191.2;
+const menuHeight = 280.1;
+const animDuration = 250; // in ms
 
 const menuOptions = [
 	"Group info",
@@ -12,7 +15,7 @@ const menuOptions = [
 
 const menuList = document.createElement("ul");
 menuOptions.forEach(option => {
-	let menuItem = document.createElement("li");
+	const menuItem = document.createElement("li");
 	menuItem.textContent = option;
 	menuList.append(menuItem);
 });
@@ -24,10 +27,33 @@ function clickedOutside(e) {
 	removeMenu();
 }
 
+function _calculateTransformOrigin(e) {
+	let transformOriginX = "left";
+	let transformOriginY = "top";
+
+	if (e.clientX + menuWidth >= window.innerWidth) {
+		transformOriginX = "right";
+		menuContainer.style.left = e.clientX - menuWidth + "px";
+	} else {
+		menuContainer.style.left = e.clientX + "px";
+	}
+
+	if (e.clientY + menuHeight >= window.innerHeight) {
+		transformOriginY = "bottom";
+		menuContainer.style.top = e.clientY - menuHeight + "px";
+	} else {
+		menuContainer.style.top = e.clientY + "px";
+	}
+
+	menuContainer.style.transformOrigin =
+		transformOriginY + " " + transformOriginX;
+}
+
 function addMenu(e) {
 	e.preventDefault();
-	menuContainer.style.top = e.clientY + "px";
-	menuContainer.style.left = e.clientX + "px";
+
+	_calculateTransformOrigin(e);
+
 	document.body.append(menuContainer);
 	setTimeout(() => menuContainer.classList.add("reveal"), 10);
 
@@ -39,7 +65,7 @@ function removeMenu() {
 	setTimeout(() => {
 		menuContainer.remove();
 		document.removeEventListener("click", clickedOutside);
-	}, 251);
+	}, animDuration + 1);
 }
 
 document.addEventListener("contextmenu", addMenu);
