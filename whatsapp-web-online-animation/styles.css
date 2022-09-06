@@ -1,0 +1,42 @@
+* {
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	font-family: sans-serif;
+	background: black;
+	color: white;
+	max-width: 1000px;
+	margin: auto;
+}
+
+.wrapper {
+	display: flex;
+	flex-direction: column;
+	margin-top: 50px;
+	padding: 10px;
+	border: 1px solid red;
+	height: 63.7px;
+	gap: 5px;
+	--anim-duration: 0.25s;
+}
+
+.name {
+	font-size: 1.2rem;
+	font-weight: 600;
+	transition: all var(--anim-duration) ease-out;
+	height: 50%;
+	display: flex;
+	align-items: center;
+}
+
+.online-status {
+	font-size: 0.8rem;
+	overflow: hidden;
+	transition: all var(--anim-duration) ease-out;
+	height: 50%;
+	display: flex;
+	align-items: center;
+}
