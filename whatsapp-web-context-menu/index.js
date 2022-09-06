@@ -20,23 +20,26 @@ menuOptions.forEach(option => {
 menuContainer.append(menuList);
 
 function clickedOutside(e) {
-	// if (e.target === menuContainer)
+	if (e.target === menuContainer || menuContainer.contains(e.target)) return;
+	removeMenu();
 }
 
 function addMenu(e) {
+	e.preventDefault();
 	menuContainer.style.top = e.clientY + "px";
 	menuContainer.style.left = e.clientX + "px";
 	document.body.append(menuContainer);
 	setTimeout(() => menuContainer.classList.add("reveal"), 10);
 
-	document.addEventListener("click");
+	document.addEventListener("click", clickedOutside);
 }
 
-function removeMenu(e) {
+function removeMenu() {
 	menuContainer.classList.remove("reveal");
 	setTimeout(() => {
 		menuContainer.remove();
+		document.removeEventListener("click", clickedOutside);
 	}, 251);
 }
 
-document.addEventListener("click", addMenu);
+document.addEventListener("contextmenu", addMenu);
