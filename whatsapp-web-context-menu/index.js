@@ -27,7 +27,7 @@ function clickedOutside(e) {
 	removeMenu();
 }
 
-function _calculateTransformOrigin(e) {
+function _animateMenu(e) {
 	let transformOriginX = "left";
 	let transformOriginY = "top";
 
@@ -49,22 +49,40 @@ function _calculateTransformOrigin(e) {
 		transformOriginY + " " + transformOriginX;
 }
 
+function moveMenu(e) {
+	e.preventDefault();
+
+	_animateMenu(e);
+}
+
+function _initListeners() {
+	document.addEventListener("click", clickedOutside);
+	document.removeEventListener("contextmenu", addMenu);
+	document.addEventListener("contextmenu", moveMenu);
+}
+
 function addMenu(e) {
 	e.preventDefault();
 
-	_calculateTransformOrigin(e);
+	_animateMenu(e);
 
 	document.body.append(menuContainer);
 	setTimeout(() => menuContainer.classList.add("reveal"), 10);
 
-	document.addEventListener("click", clickedOutside);
+	setTimeout(() => _initListeners(), animDuration + 1);
+}
+
+function _delListeners() {
+	document.removeEventListener("click", clickedOutside);
+	document.removeEventListener("contextmenu", moveMenu);
+	document.addEventListener("contextmenu", addMenu);
 }
 
 function removeMenu() {
 	menuContainer.classList.remove("reveal");
 	setTimeout(() => {
 		menuContainer.remove();
-		document.removeEventListener("click", clickedOutside);
+		_delListeners();
 	}, animDuration + 1);
 }
 
